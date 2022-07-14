@@ -61,7 +61,7 @@ class InternalEnforcer extends CoreEnforcer {
 
         if (watcher != null && autoNotifyWatcher) {
             if (watcher instanceof WatcherEx) {
-                ((WatcherEx) watcher).updateForAddPolicy(rule.toArray(new String[0]));
+                ((WatcherEx) watcher).updateForAddPolicy(model.getModelId(), sec, ptype, rule.toArray(new String[0]));
             } else {
                 watcher.update();
             }
@@ -147,7 +147,7 @@ class InternalEnforcer extends CoreEnforcer {
 
         if (watcher != null && autoNotifyWatcher) {
             if (watcher instanceof WatcherEx) {
-                ((WatcherEx) watcher).updateForRemovePolicy(rule.toArray(new String[0]));
+                ((WatcherEx) watcher).updateForRemovePolicy(model.getModelId(), sec, ptype, rule.toArray(new String[0]));
             } else {
                 watcher.update();
             }
@@ -307,7 +307,7 @@ class InternalEnforcer extends CoreEnforcer {
         if (watcher != null && autoNotifyWatcher) {
             // error intentionally ignored
             if (watcher instanceof WatcherEx) {
-                ((WatcherEx) watcher).updateForRemoveFilteredPolicy(fieldIndex, fieldValues);
+                ((WatcherEx) watcher).updateForRemoveFilteredPolicy(model.getModelId(),sec, ptype, fieldIndex, fieldValues);
             } else {
                 watcher.update();
             }

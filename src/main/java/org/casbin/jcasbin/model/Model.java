@@ -28,6 +28,7 @@ import static org.casbin.jcasbin.util.Util.splitCommaDelimited;
  */
 public class Model extends Policy {
     private static final Map<String, String> sectionNameMap;
+    private String modelId;
 
     static {
         sectionNameMap = new HashMap<>();
@@ -43,6 +44,10 @@ public class Model extends Policy {
 
     public Model() {
         model = new HashMap<>();
+    }
+    public Model(String modelId) {
+        this.model = new HashMap<>();
+        this.modelId = modelId;
     }
 
     public int getModCount() {
@@ -227,6 +232,14 @@ public class Model extends Policy {
                 assertion.policyIndex.put(assertion.policy.get(i).toString(), i);
             }
         }
+    }
+
+    public String getModelId() {
+        return modelId;
+    }
+
+    public void setModelId(String modelId) {
+        this.modelId = modelId;
     }
 
     public enum PolicyOperations {

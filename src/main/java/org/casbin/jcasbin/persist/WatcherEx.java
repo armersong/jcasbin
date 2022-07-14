@@ -17,11 +17,11 @@ package org.casbin.jcasbin.persist;
 import org.casbin.jcasbin.model.Model;
 
 public interface WatcherEx extends Watcher {
-    void updateForAddPolicy(String... params);
+    void updateForAddPolicy(String modelId, String sec, String ptype, String... params);
 
-    void updateForRemovePolicy(String... params);
+    void updateForRemovePolicy(String modelId, String sec, String ptype, String... params);
 
-    void updateForRemoveFilteredPolicy(int fieldIndex, String... fieldValues);
+    void updateForRemoveFilteredPolicy(String modelId, String sec, String ptype, int fieldIndex, String... fieldValues);
 
-    void updateForSavePolicy(Model model);
+    void updateForSavePolicy(String modeId, Model model);
 }

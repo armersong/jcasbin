@@ -65,8 +65,7 @@ public class CoreEnforcer {
     boolean autoBuildRoleLinks;
     boolean autoNotifyWatcher = true;
     boolean autoNotifyDispatcher = true;
-
-    private AviatorEvaluatorInstance aviatorEval;
+    AviatorEvaluatorInstance aviatorEval;
 
     void initialize() {
         rmMap = new HashMap<>();
@@ -294,7 +293,7 @@ public class CoreEnforcer {
         adapter.savePolicy(model);
         if (watcher != null && autoNotifyWatcher) {
             if (watcher instanceof WatcherEx) {
-                ((WatcherEx) watcher).updateForSavePolicy(model);
+                ((WatcherEx) watcher).updateForSavePolicy(model.getModelId(), model);
             } else {
                 watcher.update();
             }
