@@ -18,13 +18,13 @@ import com.googlecode.aviator.AviatorEvaluatorInstance;
 import org.casbin.jcasbin.rbac.RoleManager;
 import org.casbin.jcasbin.util.BuiltInFunctions;
 import org.casbin.jcasbin.util.EnforceContext;
+import org.casbin.jcasbin.util.SyncedLRUCache;
 import org.casbin.jcasbin.util.Util;
 
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 public class TestUtil {
     static void testEnforce(Enforcer e, Object sub, Object obj, String act, boolean res) {
@@ -33,6 +33,14 @@ public class TestUtil {
 
     static void testEnforceWithMatcher(Enforcer e, String matcher, Object sub, Object obj, String act, boolean res) {
         assertEquals(res, e.enforceWithMatcher(matcher, sub, obj, act));
+    }
+
+    static void testEnforceEx(Enforcer e, Object sub, Object obj, String act, boolean res) {
+        assertEquals(res, e.enforceEx(sub, obj, act));
+    }
+
+    static void testEnforceExWithMatcher(Enforcer e, String matcher, Object sub, Object obj, String act, boolean res) {
+        assertEquals(res, e.enforceExWithMatcher(matcher, sub, obj, act));
     }
 
     static void testEnforceWithoutUsers(Enforcer e, String obj, String act, boolean res) {
@@ -119,8 +127,26 @@ public class TestUtil {
         }
     }
 
+    static void testGetRoles(RoleManager rm, String name, String domain, List<String> res) {
+        List<String> myRes = rm.getRoles(name, domain);
+        Util.logPrint("Roles for " + name + ": " + myRes);
+
+        if (!Util.setEquals(res, myRes)) {
+            fail("Roles for " + name + ": " + myRes + ", supposed to be " + res);
+        }
+    }
+
     static void testGetUsers(Enforcer e, String name, List<String> res) {
         List<String> myRes = e.getUsersForRole(name);
+        Util.logPrint("Users for " + name + ": " + myRes);
+
+        if (!Util.setEquals(res, myRes)) {
+            fail("Users for " + name + ": " + myRes + ", supposed to be " + res);
+        }
+    }
+
+    static void testGetUsers(RoleManager rm, String name, List<String> res) {
+        List<String> myRes = rm.getUsers(name);
         Util.logPrint("Users for " + name + ": " + myRes);
 
         if (!Util.setEquals(res, myRes)) {
@@ -184,6 +210,15 @@ public class TestUtil {
 
     static void testGetRolesInDomain(Enforcer e, String name, String domain, List<String> res) {
         List<String> myRes = e.getRolesForUserInDomain(name, domain);
+        Util.logPrint("Roles for " + name + " under " + domain + ": " + myRes);
+
+        if (!Util.setEquals(res, myRes)) {
+            fail("Roles for " + name + " under " + domain + ": " + myRes + ", supposed to be " + res);
+        }
+    }
+
+    static void testGetUsersInDomain(Enforcer e, String name, String domain, List<String> res) {
+        List<String> myRes = e.getUsersForRoleInDomain(name, domain);
         Util.logPrint("Roles for " + name + " under " + domain + ": " + myRes);
 
         if (!Util.setEquals(res, myRes)) {
@@ -260,5 +295,16 @@ public class TestUtil {
 
     static void testIpMatch(String ip1, String ip2, boolean res) {
         assertEquals(res, BuiltInFunctions.ipMatch(ip1, ip2));
+    }
+
+    static void testCacheGet(SyncedLRUCache<String, Integer> cache, String key, Integer value, boolean res) {
+        assertEquals(res, value.equals(cache.get(key)));
+    }
+
+    static void testCachePut(SyncedLRUCache<String, Integer> cache, String key, Integer value) {
+        cache.put(key, value);
+        if (!value.equals(cache.get(key))) {
+            fail("Put(" + key + ", " + value + "): didn't add value");
+        }
     }
 }
