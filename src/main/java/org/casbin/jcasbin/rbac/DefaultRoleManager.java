@@ -18,6 +18,7 @@ import org.casbin.jcasbin.util.SyncedLRUCache;
 import org.casbin.jcasbin.util.Util;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiPredicate;
 
 public class DefaultRoleManager implements RoleManager {
@@ -147,7 +148,7 @@ public class DefaultRoleManager implements RoleManager {
     @Override
     public void clear() {
         this.matchingFuncCache = new SyncedLRUCache<>(100);
-        this.allRoles = new HashMap<>();
+        this.allRoles = new ConcurrentHashMap<>();
     }
 
     /**
